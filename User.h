@@ -25,7 +25,7 @@ class User {
         void setUsername(std::string newUsername);
         void setNIF(std::string newNIF);
         void setPassword(unsigned int newPass);
-        void setPrivileges(std::string newPrivileges);
+        void setPrivileges(Privilegios newPrivileges);
         bool operator== (const User& other) const;
         friend std::ostream& operator<<(std::ostream& os, const User& user);
     protected:

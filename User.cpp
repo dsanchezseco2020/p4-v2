@@ -44,12 +44,12 @@ std::string User::getPrivileges() const {
     }
 }
 
-void User::setPrivileges(std::string newPrivileges){
-    if(newPrivileges == "ADMIN"){
+void User::setPrivileges(Privilegios newPrivileges){
+    if(newPrivileges == ADMIN){
         privilegio_ = User::ADMIN;
-    } else if(newPrivileges == "EMPLOYEE"){
+    } else if(newPrivileges == EMPLOYEE){
         privilegio_ = User::EMPLOYEE;
-    } else if(newPrivileges == "GUEST"){
+    } else if(newPrivileges == GUEST){
         privilegio_ = User::GUEST;
     }
 }
