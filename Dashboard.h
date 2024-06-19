@@ -13,8 +13,10 @@
 
 void clearScreen();
 void printMenu();
+void InternalMenu(User usuario);
 int getOption(int min, int max);
 void manageMenuSelection(User usuario);
+void manageInternalMenu(User usuario);
 void loginForm(User usuario);
 
 

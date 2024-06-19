@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -std=c++11 -Wall
+CFLAGS = -Wall -g
 .RECIPEPREFIX = >
 
-all: mainSensor mainAirSensor mainHumSensor mainLightSensor mainRGBCamera mainThermalCamera mainUser mainAdmin mainEmployee mainDashboard User
+all: mainDashboard
 
 # Compilación de la clase Sensor
 mainSensor: mainSensor.o Sensor.o
@@ -97,13 +97,13 @@ Employee.o: Employee.cpp Employee.h User.h
 
 # Compilacion del Dashboard
 
-mainDashboard: mainDashboard.o Dashboard.o 
->$(CC) $(CFLAGS) -o mainDashboard mainDashboard.o Dashboard.o
+mainDashboard: mainDashboard.o Dashboard.o User.o
+>$(CC) $(CFLAGS) -o mainDashboard mainDashboard.o Dashboard.o User.o
 
-mainDashboard.o: mainDashboard.cpp Dashboard.h 
+mainDashboard.o: mainDashboard.cpp Dashboard.h User.h
 >$(CC) $(CFLAGS) -c mainDashboard.cpp
 
-Dashboard.o: Dashboard.cpp Dashboard.h
+Dashboard.o: Dashboard.cpp Dashboard.h User.h
 >$(CC) $(CFLAGS) -c Dashboard.cpp
 
 # Clean para eliminar todos los archivos objeto y ejecutables

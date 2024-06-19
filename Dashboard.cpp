@@ -50,22 +50,35 @@ void printMenu(){
 
 int getOption(int min, int max) {
     int option;
+    string optionStr;
     bool exit = false;
     while(!exit){
         cout << "Select an option: ";
-        cin >> option;
-
-        if (option >= 1 || option <= 2){
-            exit = true;
-        }
-        else{
-            cout << "Invalid option! Select an option between 1 or 2";
-        }
+        cin >> optionStr;
+        try{
+            option = stoi(optionStr);
+            if (option >= min || option <= max || optionStr == "exit"){
+                exit = true;
+            }
+            else{
+                cout << "Invalid option! Select an option between 1 or 2";
+            }
+        } catch(exception& e){
+            if (optionStr == "exit"){
+                exit = true;
+            } else {
+                cout << "Invalid option! Select an option between 1 or 2";
+            }
+        }    
     }
-    return option;
+    if (optionStr == "exit"){
+        return -1;
+    } else {
+        return option;
+    }
 }
 
-void loginForm(User usuario){ //CAMBIAR A BOOL
+bool loginForm(User usuario){ //CAMBIAR A BOOL
     std::string username;
     std::string NIF;
     unsigned int password;
@@ -87,17 +100,75 @@ void loginForm(User usuario){ //CAMBIAR A BOOL
 
     if (usuario == loginUser){
         cout << "\n Login successful!, Welcome to the greenhouse system,  " << username << endl;
+        return true;
+    } else {
+        cout << "\n Login failed, Incorrect username, NIF, or password." << endl;
+        return false;
     }
-    cout << "\n Login failed, Incorrect username, NIF, or password." << endl;
+}
+
+void InternalMenu(User usuario){
+    if (loginForm(usuario)){
+        clearScreen();
+        cout << " ******************* GREENHOUSE ******************** " << endl;
+        cout << " *                                                 * " << endl;
+        cout << " *  ~ WELCOME TO THE GREENHOUSE ~                  * " << endl;
+        cout << " *                                                 * " << endl;
+        cout << " *    1.- Sensors                                  * " << endl;
+        cout << " *                                                 * " << endl;
+        cout << " *                                                 * " << endl;
+        if (usuario.getPrivileges() == "ADMIN"){
+            cout << " *    2.- Cameras                                  * " << endl;
+            cout << " *                                                 * " << endl;
+            cout << " *                                                 * " << endl;
+            cout << " *    3.- Team Management                          * " << endl;
+        }
+        cout << " *                                                 * " << endl;
+        cout << " *                                                 * " << endl;
+        cout << " *                                                 * " << endl;
+        cout << " *    Type exit to quit                            * " << endl;
+        cout << " *                                                 * " << endl;    
+        cout << " *************************************************** " << endl;
+
+    }
+}
+
+void manageInternalMenu(User usuario){
+    InternalMenu(usuario);
+    if(usuario.getPrivileges() == "ADMIN"){
+        int option = getOption(1, 3);
+        if (option == 1){
+            cout << " Sensors Menu!" << endl;
+        } else if (option == 2){
+            cout << " Cameras Menu!" << endl;
+        } else if (option == 3){
+            cout << " Team Management Menu!" << endl;
+        } else if (option == -1){
+            cout << " Exiting! Bye!" << endl;
+            exit(EXIT_SUCCESS);
+        } else {
+            cout << " Invalid option!" << endl;
+        };
+    } else {
+        int option = getOption(1, 1);
+        if (option == 1){
+            cout << " Sensors Menu!" << endl;
+        }else if (option == -1){
+            cout << " Exiting! Bye!" << endl;
+            exit(EXIT_SUCCESS);
+        } else {
+            cout << " Invalid option!" << endl;
+        }
+    }
 }
 
 void manageMenuSelection(User usuario){
     int option = getOption(1, 2);
     if (option == 1){
         cout << " Login Form!" << endl; 
-        loginForm(usuario);
-    } else if (option == 2){
-        cout << " Exiting asd! Bye!" << endl;
+        manageInternalMenu(usuario);
+    } else if (option == 2){ /// POR AHORA OPTION SOLO COGE INT, HACER QUE PUEDA LEER STRINGS TMB
+        cout << " Exiting! Bye!" << endl;
         exit(EXIT_SUCCESS);
     }
 }
