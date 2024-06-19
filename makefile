@@ -97,13 +97,13 @@ Employee.o: Employee.cpp Employee.h User.h
 
 # Compilacion del Dashboard
 
-mainDashboard: mainDashboard.o Dashboard.o User.o
->$(CC) $(CFLAGS) -o mainDashboard mainDashboard.o Dashboard.o User.o
+mainDashboard: mainDashboard.o Dashboard.o User.o Sensor.o AirSensor.o HumSensor.o LightSensor.o RGBCamera.o ThermalCamera.o
+>$(CC) $(CFLAGS) -o mainDashboard mainDashboard.o Dashboard.o User.o Sensor.o AirSensor.o HumSensor.o LightSensor.o RGBCamera.o ThermalCamera.o
 
-mainDashboard.o: mainDashboard.cpp Dashboard.h User.h
+mainDashboard.o: mainDashboard.cpp Dashboard.h User.h Sensor.h AirSensor.h HumSensor.h LightSensor.h RGBCamera.h ThermalCamera.h
 >$(CC) $(CFLAGS) -c mainDashboard.cpp
 
-Dashboard.o: Dashboard.cpp Dashboard.h User.h
+Dashboard.o: Dashboard.cpp Dashboard.h User.h Sensor.h AirSensor.h HumSensor.h LightSensor.h RGBCamera.h ThermalCamera.h
 >$(CC) $(CFLAGS) -c Dashboard.cpp
 
 # Clean para eliminar todos los archivos objeto y ejecutables

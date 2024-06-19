@@ -7,12 +7,15 @@
 #include "User.h"
 #include "Admin.h"
 #include "Employee.h"
+#include "Dashboard.h"
 
 #include <iostream>
+#include <vector>
 #include <cstdlib> // Para std::system
 
 
 using namespace std;
+
 
 
 // Esta es una funcion simple que con directivas de preprocesado
@@ -78,7 +81,20 @@ int getOption(int min, int max) {
     }
 }
 
-bool loginForm(User usuario){ //CAMBIAR A BOOL
+void manageMenuSelection(User usuario, airQualitySensor airSensor, humiditySensor humSensor,
+                    lightSensor ligSensor, RGBCamera rgbCam, ThermalCamera thermalCam){ // Controlo las opciones del menu de inicio
+    int option = getOption(1, 2); 
+    if (option == 1){
+        cout << " Login Form!" << endl; 
+        manageInternalMenu(usuario, airSensor, humSensor, ligSensor, rgbCam, thermalCam);
+    } else if (option == 2){ 
+        cout << " Exiting! Bye!" << endl;
+        exit(EXIT_SUCCESS);
+    }
+}
+
+
+bool loginForm(User usuario){ //Hago un formulario de login. Mas tarde comparara con la base de datos
     std::string username;
     std::string NIF;
     unsigned int password;
@@ -103,11 +119,11 @@ bool loginForm(User usuario){ //CAMBIAR A BOOL
         return true;
     } else {
         cout << "\n Login failed, Incorrect username, NIF, or password." << endl;
-        return false;
+        exit(EXIT_FAILURE);
     }
 }
 
-void InternalMenu(User usuario){
+void InternalMenu(User usuario){ //muestra distintos menus en funcion de los privilegios del usuario
     if (loginForm(usuario)){
         clearScreen();
         cout << " ******************* GREENHOUSE ******************** " << endl;
@@ -133,14 +149,17 @@ void InternalMenu(User usuario){
     }
 }
 
-void manageInternalMenu(User usuario){
+void manageInternalMenu(User usuario, airQualitySensor airSensor, humiditySensor humSensor,
+                    lightSensor ligSensor, RGBCamera rgbCam, ThermalCamera thermalCam){ // Control del primer menu interno
     InternalMenu(usuario);
     if(usuario.getPrivileges() == "ADMIN"){
         int option = getOption(1, 3);
         if (option == 1){
             cout << " Sensors Menu!" << endl;
+            manageSensorMenu(airSensor, humSensor, ligSensor);
         } else if (option == 2){
             cout << " Cameras Menu!" << endl;
+            manageCameraMenu(rgbCam, thermalCam);
         } else if (option == 3){
             cout << " Team Management Menu!" << endl;
         } else if (option == -1){
@@ -153,6 +172,7 @@ void manageInternalMenu(User usuario){
         int option = getOption(1, 1);
         if (option == 1){
             cout << " Sensors Menu!" << endl;
+            manageSensorMenu(airSensor, humSensor, ligSensor);
         }else if (option == -1){
             cout << " Exiting! Bye!" << endl;
             exit(EXIT_SUCCESS);
@@ -162,14 +182,77 @@ void manageInternalMenu(User usuario){
     }
 }
 
-void manageMenuSelection(User usuario){
-    int option = getOption(1, 2);
+
+void sensorMenu(){
+    clearScreen();
+    cout << " ********************* SENSORS ********************* " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    ~ SENSORS MENU ~                             * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    1.- Air Sensor                               * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    2.- Humidity Sensor                          * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    3.- Light Sensor                             * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    Type exit to quit                            * " << endl;
+    cout << " *                                                 * " << endl;    
+    cout << " *************************************************** " << endl;
+}
+
+void manageSensorMenu(airQualitySensor airSensor, humiditySensor humSensor,lightSensor ligSensor){ // Control del menu de sensores
+    sensorMenu();
+    int option = getOption(1, 3);
     if (option == 1){
-        cout << " Login Form!" << endl; 
-        manageInternalMenu(usuario);
-    } else if (option == 2){ /// POR AHORA OPTION SOLO COGE INT, HACER QUE PUEDA LEER STRINGS TMB
+        airSensor.collectData();
+        cout << airSensor << std::endl;
+    } else if (option == 2){
+        humSensor.collectData();
+        cout << humSensor << std::endl;
+    } else if (option == 3){
+        ligSensor.collectData();
+        cout << ligSensor << std::endl;
+    } else if (option == -1){
         cout << " Exiting! Bye!" << endl;
         exit(EXIT_SUCCESS);
+    } else {
+        cout << " Invalid option!" << endl;
     }
 }
 
+void cameraMenu(){
+    clearScreen();
+    cout << " ********************* SENSORS ********************* " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    ~ SENSORS MENU ~                             * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    1.- RGB Camera                               * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    2.- Thermal Camera                           * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *                                                 * " << endl;
+    cout << " *    Type exit to quit                            * " << endl;
+    cout << " *                                                 * " << endl;    
+    cout << " *************************************************** " << endl;
+}
+
+void manageCameraMenu(RGBCamera rgbCam, ThermalCamera thermalCam){ // Control del menu de sensores
+    cameraMenu();
+    int option = getOption(1, 2);
+    if (option == 1){
+        cout << rgbCam << std::endl;
+    } else if (option == 2){
+        cout << thermalCam << std::endl;
+    } else if (option == -1){
+        cout << " Exiting! Bye!" << endl;
+        exit(EXIT_SUCCESS);
+    } else {
+        cout << " Invalid option!" << endl;
+    }
+
+
+}
